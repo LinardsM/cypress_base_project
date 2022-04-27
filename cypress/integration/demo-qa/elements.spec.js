@@ -2,6 +2,7 @@ import ButtonsPage from "../../pageObjects/buttonsPage";
 import CheckBoxPage from "../../pageObjects/checkBoxPage";
 import LinksPage from "../../pageObjects/linksPage";
 import RadioButtonsPage from "../../pageObjects/radioButtonsPage";
+import SelectablesPage from "../../pageObjects/selectablesPage";
 import TextBoxPage from "../../pageObjects/textBoxPage";
 import WebTablesPage from "../../pageObjects/webTablesPage";
 
@@ -145,7 +146,7 @@ context("Elements Page", () => {
       ButtonsPage.visit();
     });
 
-    it.only("Click on buttons", () => {
+    it("Click on buttons", () => {
       ButtonsPage.doubleClickButton.dblclick();
       ButtonsPage.doubleClickMessage.should('contain', 'You have done');
 
@@ -170,6 +171,43 @@ context("Elements Page", () => {
       cy.wait("@getCreated").then(data => {
         expect(data.response.statusCode).to.eq(201);
       })
+    });
+  });
+
+  context("Selectable scenarios", () => {
+    beforeEach(() => {
+      SelectablesPage.visit();
+    });
+
+    it("Click on list elements", () => {
+      SelectablesPage.allListItems.contains("Cras justo odio").click();
+      SelectablesPage.allListItems.contains("Morbi leo risus").click();
+
+      SelectablesPage.allListItems.contains("Cras justo odio").should('have.class', 'active');
+      SelectablesPage.allListItems.contains("Morbi leo risus").should('have.class', 'active');
+
+      SelectablesPage.allListItems.contains("Dapibus ac facilisis in").should('not.have.class', 'active');
+      SelectablesPage.allListItems.contains("Porta ac consectetur ac").should('not.have.class', 'active');
+    });
+
+    it.only("Click on grid elements", () => {
+      SelectablesPage.gridNavButton.click();
+
+      SelectablesPage.allGridItems.contains("Two").click();
+      SelectablesPage.allGridItems.contains("Four").click();
+      SelectablesPage.allGridItems.contains("Six").click();
+      SelectablesPage.allGridItems.contains("Eight").click();
+
+      SelectablesPage.allGridItems.contains("Two").should('have.class', 'active');
+      SelectablesPage.allGridItems.contains("Four").should('have.class', 'active');
+      SelectablesPage.allGridItems.contains("Six").should('have.class', 'active');
+      SelectablesPage.allGridItems.contains("Eight").should('have.class', 'active');
+
+      SelectablesPage.allGridItems.contains("One").should('not.have.class', 'active');
+      SelectablesPage.allGridItems.contains("Three").should('not.have.class', 'active');
+      SelectablesPage.allGridItems.contains("Five").should('not.have.class', 'active');
+      SelectablesPage.allGridItems.contains("Seven").should('not.have.class', 'active');
+      SelectablesPage.allGridItems.contains("Nine").should('not.have.class', 'active');
     });
   });
 
